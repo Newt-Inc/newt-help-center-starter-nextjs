@@ -13,7 +13,7 @@ Newt's starter
 
 ## 概要
 
-**newt-help-center-starter-nuxtjs**
+**newt-help-center-starter-nextjs**
 <br />Newtを利用したシンプルなヘルプセンターサイト
 <br />技術構成：Next.js, TypeScript
 

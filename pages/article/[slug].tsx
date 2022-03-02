@@ -72,16 +72,15 @@ export default function ArticlePage({
                 <a className={styles.Breadcrumb_Link}>Home</a>
               </Link>
             </li>
-            <li
-              v-if="currentArticle.category"
-              className={styles.Breadcrumb_Item}
-            >
-              <Link href={`/category/${currentArticle.category.slug}`}>
-                <a className={styles.Breadcrumb_Link}>
-                  {currentArticle.category.name}
-                </a>
-              </Link>
-            </li>
+            {currentArticle.category && (
+              <li className={styles.Breadcrumb_Item}>
+                <Link href={`/category/${currentArticle.category.slug}`}>
+                  <a className={styles.Breadcrumb_Link}>
+                    {currentArticle.category.name}
+                  </a>
+                </Link>
+              </li>
+            )}
           </ul>
           <h1 className={styles.Article_Title}>
             {currentArticle?.title || ""}
