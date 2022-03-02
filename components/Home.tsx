@@ -3,29 +3,18 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { Cover } from "../components/Cover";
 import { Layout } from "../components/Layout";
-import { Dropdown } from "../components/Dropdown";
 import { Category } from "../types/category";
 import { ArticleCard } from "../components/ArticleCard";
 import { Article } from "../types/article";
-import { Pagination } from "../components/Pagination";
+import Link from "next/link";
 
 export interface HomeProps {
   app: AppMeta;
   categories: (Content & Category)[];
   articles: (Content & Article)[];
-  total: number;
-  page?: number;
-  categorySlug?: string;
 }
 
-export function Home({
-  app,
-  categories,
-  articles,
-  total,
-  page = 1,
-  categorySlug = "",
-}: HomeProps) {
+export function Home({ app, categories, articles }: HomeProps) {
   return (
     <Layout app={app}>
       <Head>
@@ -33,18 +22,30 @@ export function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {app.cover?.value && <Cover app={app} />}
-      <div className={styles.Articles}>
-        <Dropdown categories={categories} selected={categorySlug} />
-        <div className={styles.Inner}>
-          {articles.map((article) => (
-            <ArticleCard article={article} key={article._id} />
+      <div className={styles.Inner}>
+        <div className={styles.Categories}>
+          {categories.map((category) => (
+            <div className={styles.Category} key={category._id}>
+              <Link href={`/category/${category.slug}`}>
+                <a className={styles.Category_Link}>
+                  <em>{category.emoji.value}</em>
+                  <div className={styles.Category_Text}>
+                    <h2>{category.name}</h2>
+                    <p>{category.description}</p>
+                  </div>
+                </a>
+              </Link>
+            </div>
           ))}
         </div>
-        <Pagination
-          total={total}
-          current={page}
-          basePath={categorySlug ? `/category/${categorySlug}` : ``}
-        />
+        <div className={styles.Articles}>
+          <h2 className={styles.Articles_Heading}>Recent articles</h2>
+          <div className={styles.Articles_Inner}>
+            {articles.map((article) => (
+              <ArticleCard article={article} key={article._id} />
+            ))}
+          </div>
+        </div>
       </div>
     </Layout>
   );

@@ -1,9 +1,9 @@
 {
-  "name": "newt-blog-starter-nextjs",
+  "name": "newt-help-center-starter-nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start"
   },

@@ -1,6 +1,49 @@
+.Breadcrumb {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin: 8px 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+.Breadcrumb_Item {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.Breadcrumb_Link {
+  padding: 0;
+  margin: 0 32px 0 0;
+  display: block;
+  font-size: 1.4rem;
+  position: relative;
+  text-decoration: none;
+  line-height: 1.5;
+}
+.Breadcrumb_Link:hover {
+  text-decoration: underline;
+}
+.Breadcrumb_Link::before {
+  pointer-events: none;
+  position: absolute;
+  content: "";
+  right: -18px;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid #888;
+  border-right: 1px solid #888;
+  transform: rotate(45deg);
+}
+.Breadcrumb_Item:last-child .Breadcrumb_Link {
+  margin: 0;
+}
+.Breadcrumb_Item:last-child .Breadcrumb_Link::before {
+  content: none;
+}
 .Article {
-  padding: 24px;
   margin: 0 auto;
+  padding: 24px 24px 40px 24px;
 }
 .Article_Header {
   margin: 0 0 24px 0;
@@ -9,40 +52,8 @@
   font-size: 2.4rem;
   line-height: 1.5;
   font-weight: bold;
-  margin: 0 0 16px 0;
+  margin: 0;
   padding: 0;
-}
-.Article_Data {
-  display: flex;
-  align-items: center;
-}
-.Article_Avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 16px;
-  overflow: hidden;
-  margin: 0 12px 0 0;
-  flex-shrink: 0;
-  background: rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.Article_Avatar img {
-  width: 32px;
-  height: 32px;
-  object-fit: cover;
-  font-family: "object-fit: cover"; /* IE11 */
-}
-.Article_AuthorName {
-  font-weight: bold;
-  margin: 0 8px 0 0;
-}
-.Article_Date {
-  color: #888;
-}
-.Article_Body {
-  padding: 0 0 28px 0;
 }
 .Article_Body h1,
 .Article_Body h2,
@@ -133,107 +144,25 @@
   margin: 0;
   color: #fff;
 }
-.Fav {
-  display: flex;
-  align-items: center;
+.Related {
+  border-top: 1px solid #e5e5e5;
+  margin: 36px 0 0 0;
+  padding: 28px 0 0 0;
 }
-.Fav_Button {
-  border: none;
-  width: 40px;
-  height: 40px;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 3px 10px -8px rgba(0, 0, 0, 1);
-  position: relative;
-  cursor: pointer;
-}
-.Fav_Button:focus {
-  outline: none;
-}
-.Fav_Button:focus::after {
-  content: "";
-  border: 2px solid #005fcc;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 20px;
-  z-index: 0;
-}
-.Fav._on .Fav_Button:focus::after {
-  border: 2px solid #e0245e;
-}
-.Fav_Button:hover > svg {
-  fill: #888;
-}
-.Fav_Button:active {
-  transform: scale(0.96);
-}
-.Fav_Button > svg {
-  position: absolute;
-  left: 12px;
-  top: 12px;
-  height: 18px;
-  width: 16px;
-  display: block;
-  fill: #ccc;
-  transition: fill 0.2s;
-}
-.Fav > em {
-  font-style: normal;
-  font-weight: bold;
-  color: #888;
-  margin: 0 0 0 12px;
-}
-.Fav._on .Fav_Button > svg {
-  fill: #e0245e;
-  transition: none;
-}
-.Fav._on > em {
-  color: #e0245e;
-}
-.Author {
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  padding: 24px;
-  display: flex;
-  margin: 0 0 40px 0;
-}
-.Author_Avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
-  overflow: hidden;
-  margin: 0 16px 0 0;
-  flex-shrink: 0;
-  background: rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.Author_Avatar img {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  font-family: "object-fit: cover"; /* IE11 */
-}
-.Author_Name {
-  margin: 0 0 4px 0;
+.Related_Heading {
+  margin: 0 0 16px 0;
   padding: 0;
-  font-weight: bold;
-  line-height: 1.5;
+  font-size: 1.8rem;
 }
-.Author_Description {
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-  font-size: 1.2rem;
-}
-.Author_Description p {
+.Related_List {
   margin: 0;
   padding: 0;
 }
+.Related_Item {
+  margin: 0 0 8px 28px;
+  padding: 0;
+}
+
 @media (min-width: 600px) {
   .Article {
     max-width: 700px;
@@ -241,5 +170,9 @@
   }
   .Article_Header {
     margin: 0 0 48px 0;
+  }
+  .Related {
+    margin: 56px 0 0 0;
+    padding: 44px 0 0 0;
   }
 }

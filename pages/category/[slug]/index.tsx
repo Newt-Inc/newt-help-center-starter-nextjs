@@ -1,15 +1,15 @@
-import { Home, HomeProps } from "../../../components/Home";
+import { Category, CategoryProps } from "../../../components/Category";
 import { fetchApp, fetchArticles, fetchCategories } from "../../../lib/api";
 
-export default function CategoryPage(props: HomeProps) {
-  return <Home {...props} />;
+export default function CategoryPage(props: CategoryProps) {
+  return <Category {...props} />;
 }
 
 export async function getStaticProps({
   params,
 }: {
   params: { slug: string };
-}): Promise<{ props: HomeProps }> {
+}): Promise<{ props: CategoryProps }> {
   const { slug } = params;
   const app = await fetchApp();
   const categories = await fetchCategories();
@@ -23,10 +23,9 @@ export async function getStaticProps({
   return {
     props: {
       app,
-      categories,
+      category,
       articles,
       total,
-      categorySlug: slug,
     },
   };
 }

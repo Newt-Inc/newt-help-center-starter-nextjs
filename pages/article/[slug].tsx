@@ -4,16 +4,18 @@ import Head from "next/head";
 import { useMemo } from "react";
 import { Layout } from "../../components/Layout";
 import { fetchApp, fetchArticles, fetchCurrentArticle } from "../../lib/api";
-import { formatDate } from "../../lib/date";
 import { Article } from "../../types/article";
 import { htmlToText } from "html-to-text";
+import Link from "next/link";
 
 export default function ArticlePage({
   app,
   currentArticle,
+  relatedArticles,
 }: {
   app: AppMeta;
   currentArticle: (Content & Article) | null;
+  relatedArticles: (Content & Article)[];
 }) {
   const meta = useMemo(() => {
     if (currentArticle?.meta) {
@@ -44,16 +46,6 @@ export default function ArticlePage({
     return "";
   }, [app, meta, currentArticle?.body]);
 
-  const authorName = useMemo(() => {
-    return currentArticle?.author?.fullName || "NO NAME";
-  }, [currentArticle?.author?.fullName]);
-
-  const publishDate = useMemo(() => {
-    return currentArticle?._sys?.createdAt
-      ? formatDate(currentArticle._sys.createdAt)
-      : "";
-  }, [currentArticle?._sys?.createdAt]);
-
   const body = useMemo(() => {
     if (currentArticle?.body) {
       return {
@@ -65,17 +57,6 @@ export default function ArticlePage({
     };
   }, [currentArticle?.body]);
 
-  const authorIntroduction = useMemo(() => {
-    if (currentArticle?.author?.introduction) {
-      return {
-        __html: currentArticle.author.introduction,
-      };
-    }
-    return {
-      __html: "",
-    };
-  }, [currentArticle?.author?.introduction]);
-
   return (
     <Layout app={app}>
       <Head>
@@ -85,74 +66,41 @@ export default function ArticlePage({
       </Head>
       <article className={styles.Article}>
         <div className={styles.Article_Header}>
+          <ul className={styles.Breadcrumb}>
+            <li className={styles.Breadcrumb_Item}>
+              <Link href="/">
+                <a className={styles.Breadcrumb_Link}>Home</a>
+              </Link>
+            </li>
+            <li
+              v-if="currentArticle.category"
+              className={styles.Breadcrumb_Item}
+            >
+              <Link href={`/category/${currentArticle.category.slug}`}>
+                <a className={styles.Breadcrumb_Link}>
+                  {currentArticle.category.name}
+                </a>
+              </Link>
+            </li>
+          </ul>
           <h1 className={styles.Article_Title}>
             {currentArticle?.title || ""}
           </h1>
-          <div className={styles.Article_Data}>
-            <div className={styles.Article_Avatar}>
-              {currentArticle?.author?.profileImage ? (
-                <img
-                  src={currentArticle.author.profileImage.src}
-                  alt=""
-                  width="32"
-                  height="32"
-                />
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20px"
-                  height="20px"
-                  viewBox="0 0 24 24"
-                  fill="#CCCCCC"
-                >
-                  <path d="M0 0h24v24H0V0z" fill="none" />
-                  <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              )}
-            </div>
-            <div className={styles.Article_AuthorName}>{authorName}</div>
-            <time
-              dateTime={currentArticle?._sys?.createdAt}
-              className={styles.Article_Date}
-            >
-              {publishDate}
-            </time>
-          </div>
         </div>
         <div
           className={styles.Article_Body}
           dangerouslySetInnerHTML={body}
         ></div>
-        <aside className={styles.Author}>
-          <div className={styles.Author_Avatar}>
-            {currentArticle?.author?.profileImage ? (
-              <img
-                src={currentArticle.author.profileImage.src}
-                alt=""
-                width="48"
-                height="48"
-              />
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="28px"
-                height="28px"
-                viewBox="0 0 24 24"
-                fill="#CCCCCC"
-              >
-                <path d="M0 0h24v24H0V0z" fill="none" />
-                <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-              </svg>
-            )}
-          </div>
-          <div className={styles.Author_Text}>
-            <div className={styles.Author_Name}>{authorName}</div>
-            <div
-              className={styles.Author_Description}
-              dangerouslySetInnerHTML={authorIntroduction}
-            ></div>
-          </div>
-        </aside>
+        <section className={styles.Related}>
+          <h2 className={styles.Related_Heading}>Related articles</h2>
+          <ul className={styles.Related_List}>
+            {relatedArticles.map((article) => (
+              <li className={styles.Related_Item} key={article._id}>
+                <Link href={`/article/${article.slug}`}>{article.title}</Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       </article>
     </Layout>
   );
@@ -162,10 +110,24 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const app = await fetchApp();
   const currentArticle = await fetchCurrentArticle({ slug });
+  let relatedArticles: (Content & Article)[] = [];
+  if (currentArticle) {
+    const { articles } = await fetchArticles({
+      query: {
+        tags: currentArticle.tags,
+        slug: {
+          ne: currentArticle.slug,
+        },
+        select: ["slug", "title"],
+      },
+    });
+    relatedArticles = articles;
+  }
   return {
     props: {
       app,
       currentArticle,
+      relatedArticles,
     },
   };
 }

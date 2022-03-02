@@ -30,7 +30,6 @@ export default function Search({ app }: { app: AppMeta }) {
         search: q,
         page: _page,
         limit: 100,
-        format: "text",
       });
       setArticles(articles);
       setTotal(total);
