@@ -44,7 +44,14 @@ export default function ArticlePage({
       }).slice(0, 200);
     }
     return "";
-  }, [app, meta, currentArticle?.body]);
+  }, [meta, currentArticle?.body]);
+
+  const ogImage = useMemo(() => {
+    if (meta?.ogImage?.src) {
+      return meta.ogImage.src;
+    }
+    return "";
+  }, [meta]);
 
   const body = useMemo(() => {
     if (currentArticle?.body) {
@@ -62,6 +69,7 @@ export default function ArticlePage({
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="og:image" content={ogImage} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <article className={styles.Article}>

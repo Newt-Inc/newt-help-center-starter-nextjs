@@ -1,6 +1,8 @@
+import { htmlToText } from "html-to-text";
 import { AppMeta, Content } from "newt-client-js";
 import Head from "next/head";
 import Link from "next/link";
+import { useCallback } from "react";
 import styles from "../styles/Category.module.css";
 import { Article } from "../types/article";
 import { Category } from "../types/category";
@@ -22,6 +24,17 @@ export function Category({
   total,
   page = 1,
 }: CategoryProps) {
+  const _htmlToText = useCallback((html) => {
+    return htmlToText(html, {
+      selectors: [
+        {
+          selector: "img",
+          format: "skip",
+        },
+      ],
+    });
+  }, []);
+
   return (
     <Layout app={app}>
       <Head>
@@ -43,7 +56,7 @@ export function Category({
                 <a className={styles.Article_Link}>
                   <h3 className={styles.Article_Title}>{article.title}</h3>
                   <p className={styles.Article_Description}>
-                    {article.description}
+                    {_htmlToText(article.body)}
                   </p>
                 </a>
               </Link>
