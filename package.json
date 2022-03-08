@@ -23,5 +23,8 @@
     "typescript": "^4.5.5"
   },
   "author": "Newt, Inc.",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "newt"
+  ],
 }
