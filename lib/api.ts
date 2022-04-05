@@ -1,4 +1,4 @@
-import { Content, createClient } from "newt-client-js";
+import { Content, createClient, GetContentsQuery } from "newt-client-js";
 import { Article } from "../types/article";
 import { Category } from "../types/category";
 
@@ -28,7 +28,7 @@ export const fetchCategories = async () => {
 };
 
 export const fetchArticles = async (options?: {
-  query?: Record<string, any>;
+  query?: GetContentsQuery;
   search?: string;
   category?: string;
   page?: number;
