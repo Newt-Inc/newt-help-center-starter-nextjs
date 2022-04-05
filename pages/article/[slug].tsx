@@ -125,7 +125,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   if (currentArticle) {
     const { articles } = await fetchArticles({
       query: {
-        tags: currentArticle.tags,
+        tags: { in: currentArticle.tags },
         slug: {
           ne: currentArticle.slug,
         },
