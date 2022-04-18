@@ -13,7 +13,7 @@ export function Footer({ app }: { app: AppMeta }) {
             )}
             {app.icon?.type === "image" && (
               <span className={styles.SiteName_Icon}>
-                <img src={app.icon.value} />
+                <img src={app.icon.value} alt="" />
               </span>
             )}
             <div className={styles.SiteName_Text}>

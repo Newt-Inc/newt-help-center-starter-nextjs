@@ -33,7 +33,7 @@ export function Header({ app }: { app: AppMeta }): JSX.Element {
             )}
             {app.icon?.type === "image" && (
               <span className={styles.Title_Icon}>
-                <img src={app.icon.value} />
+                <img src={app.icon.value} alt="" />
               </span>
             )}
             <div className={styles.Title_Text}>{app.name || app.uid || ""}</div>
