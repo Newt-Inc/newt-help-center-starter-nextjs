@@ -90,14 +90,13 @@ export const getPages = async (options?: { category?: string }) => {
 export const fetchCurrentArticle = async (options: { slug: string }) => {
   const { slug } = options;
   if (!slug) return null;
-  const { items } = await client.getContents<Content & Article>({
+  const article = await client.getFirstContent<Content & Article>({
     appUid: process.env.NEXT_PUBLIC_NEWT_APP_UID,
     modelUid: process.env.NEXT_PUBLIC_NEWT_ARTICLE_MODEL_UID,
     query: {
       depth: 2,
-      limit: 1,
       slug,
     },
   });
-  return items[0] || null;
+  return article;
 };
