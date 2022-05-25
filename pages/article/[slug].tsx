@@ -129,7 +129,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
         slug: {
           ne: currentArticle.slug,
         },
-        select: ["slug", "title"],
+        select: ["_id", "slug", "title"],
       },
     });
     relatedArticles = articles;
